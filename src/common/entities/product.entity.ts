@@ -1,28 +1,33 @@
-import { PrimaryGeneratedColumn } from 'typeorm/browser/decorator/columns/PrimaryGeneratedColumn.js';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { ProductCategory } from '../enums/product-category.enum';
 import { ProductMaterial } from '../enums/product-material.enum';
-import { Column } from 'typeorm';
 
+@Entity('products')
 export class ProductEntity {
-    @PrimaryGeneratedColumn({ name: 'id' })
-	id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ name: 'name' })
-    name: string;
+  @Column()
+  name: string;
 
-    @Column({ name: 'description' })
-    description: string;
+  @Column()
+  description: string;
 
-    @Column({ name: 'price' })
-    price: number;
+  @Column('decimal', { precision: 10, scale: 2 })
+  price: number;
 
-    @Column({ name: 'category' })
-    category: ProductCategory;
+  @Column({ type: 'varchar' })
+  category: ProductCategory;
 
-    @Column({ name: 'material' })
-    material: ProductMaterial;
+  @Column({ type: 'varchar' })
+  material: ProductMaterial;
 
-    @Column({ name: 'created_by_user_id' })
-    createdByUserId: number;
+  @Column({ nullable: true })
+  imageUrl: string;
 
+  @Column({ nullable: true })
+  subcategory: string;
+
+  @Column()
+  createdByUserId: number;
 }

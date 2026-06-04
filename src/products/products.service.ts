@@ -29,7 +29,10 @@ export class ProductService {
   }
 
   // Actualizar producto
-  async update(id: number, updateData: Partial<ProductEntity>): Promise<ProductEntity | null> {
+  async update(
+    id: number,
+    updateData: Partial<ProductEntity>,
+  ): Promise<ProductEntity | null> {
     await this.productRepository.update(id, updateData);
     return this.findById(id);
   }
@@ -42,6 +45,11 @@ export class ProductService {
   // Filtrar por categoría
   async findByCategory(category: ProductCategory): Promise<ProductEntity[]> {
     return await this.productRepository.find({ where: { category } });
+  }
+
+  // Filtrar por subcategoria
+  async findBySubcategory(subcategory: string): Promise<ProductEntity[]> {
+    return await this.productRepository.find({ where: { subcategory } });
   }
 
   // Filtrar por material

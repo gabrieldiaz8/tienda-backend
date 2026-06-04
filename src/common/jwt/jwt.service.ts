@@ -3,7 +3,6 @@ import { createHmac, timingSafeEqual } from 'crypto';
 import { jwtConstants } from './jwt.constants';
 import { JwtPayload, TokenPair } from './interfaces/jwtPayload.interface';
 
-
 @Injectable()
 export class JwtService {
   config = {
@@ -32,61 +31,65 @@ export class JwtService {
   generateToken(
     payload: Omit<JwtPayload, 'iat' | 'exp'>, // Omitimos iat y exp porque los genera automáticamente el JwtService
     type: 'refresh' | 'auth' = 'auth', // Por defecto es 'auth' pero podemos especificar 'refresh'
-    ): string {
+  ): string {
     const now = Math.floor(Date.now() / 1000);
     const fullPayload: JwtPayload = {
-        sub: payload.sub,
-        email: payload.email,
-        name: payload.name,
-        role: payload.role,
-        kind: type,
-        iat: now,
-        exp: now + this.config[type].expiresIn,
+      sub: payload.sub,
+      usuario: payload.usuario,
+      name: payload.name,
+      role: payload.role,
+      kind: type,
+      iat: now,
+      exp: now + this.config[type].expiresIn,
     };
 
     const encodedPayload = this.encode(JSON.stringify(fullPayload));
-    const signature = this.signContent(encodedPayload, this.config[type].secret);
+    const signature = this.signContent(
+      encodedPayload,
+      this.config[type].secret,
+    );
     return `${encodedPayload}.${signature}`;
   }
 
   refreshToken(refreshToken: string): TokenPair {
     try {
-        const payload = this.verifyToken(refreshToken, 'refresh');
+      const payload = this.verifyToken(refreshToken, 'refresh');
 
-        const timeToExpire = (payload.exp ?? 0) - Math.floor(Date.now() / 1000);
+      const timeToExpire = (payload.exp ?? 0) - Math.floor(Date.now() / 1000);
 
-        return {
+      return {
         accessToken: this.generateToken({
           sub: payload.sub,
-          email: payload.email,
+          usuario: payload.usuario,
           name: payload.name,
           role: payload.role,
         }),
         refreshToken:
-            timeToExpire < 20 * 60  // Si le quedan menos de 20 minutos
-            ? this.generateToken(  // Generamos nuevo refresh token
+          timeToExpire < 20 * 60 // Si le quedan menos de 20 minutos
+            ? this.generateToken(
+                // Generamos nuevo refresh token
                 {
                   sub: payload.sub,
-                  email: payload.email,
+                  usuario: payload.usuario,
                   name: payload.name,
                   role: payload.role,
                 },
                 'refresh',
-                )
-            : refreshToken,  // Sino, devolvemos el mismo
-        };
-    } catch (error) {
-        if (error.name === 'TokenExpiredError') {
+              )
+            : refreshToken, // Sino, devolvemos el mismo
+      };
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === 'TokenExpiredError') {
         throw new UnauthorizedException('Refresh token expirado');
-        }
-        throw new UnauthorizedException('Refresh token inválido');
+      }
+      throw new UnauthorizedException('Refresh token inválido');
     }
   }
 
   generateTokenPair(payload: Omit<JwtPayload, 'iat' | 'exp'>): TokenPair {
     return {
-        accessToken: this.generateToken(payload, 'auth'),
-        refreshToken: this.generateToken(payload, 'refresh'),
+      accessToken: this.generateToken(payload, 'auth'),
+      refreshToken: this.generateToken(payload, 'refresh'),
     };
   }
 
@@ -97,10 +100,16 @@ export class JwtService {
         throw new UnauthorizedException('Token inválido o expirado');
       }
 
-      const expectedSignature = this.signContent(encodedPayload, this.config[type].secret);
+      const expectedSignature = this.signContent(
+        encodedPayload,
+        this.config[type].secret,
+      );
       const signatureBuffer = Buffer.from(signature, 'base64url');
       const expectedBuffer = Buffer.from(expectedSignature, 'base64url');
-      if (signatureBuffer.length !== expectedBuffer.length || !timingSafeEqual(signatureBuffer, expectedBuffer)) {
+      if (
+        signatureBuffer.length !== expectedBuffer.length ||
+        !timingSafeEqual(signatureBuffer, expectedBuffer)
+      ) {
         throw new UnauthorizedException('Token inválido o expirado');
       }
 
@@ -115,8 +124,8 @@ export class JwtService {
       }
 
       return payload;
-    } catch (error) {
-        throw new UnauthorizedException('Token inválido o expirado');
+    } catch {
+      throw new UnauthorizedException('Token inválido o expirado');
     }
-    }
+  }
 }

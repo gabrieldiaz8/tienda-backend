@@ -4,4 +4,7 @@ export enum ProductCategory {
   COLLARES = 'Collares',
   DIJES = 'Dijes',
   ANILLOS = 'Anillos',
+  ABRIDORES = 'Abridores',
+  ACCESORIOS = 'Accesorios',
+  INVIERNO = 'Invierno',
 }

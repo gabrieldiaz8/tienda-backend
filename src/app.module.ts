@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -12,18 +13,29 @@ import { entities } from './common/entities';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',    // Al estar en Docker pero tú fuera, usas localhost
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',    // La que pusiste en el comando de Docker
-      database: 'joyeria_db',
-      autoLoadEntities: true, // Esto carga automáticamente tus entidades de productos y usuarios
-      synchronize: true,      // Sincroniza las tablas automáticamente (solo para desarrollo)
-      entities: entities,
+    ConfigModule.forRoot({
+      envFilePath: '.env.db',
     }),
-    AuthModule, JwtAuthModule, UsersModule, ProductsModule],
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService) => ({
+        type: 'postgres',
+        host: config.get('DB_HOST', 'localhost'),
+        port: config.get('DB_PORT', 5432),
+        username: config.get('DB_USERNAME', 'postgres'),
+        password: config.get('DB_PASSWORD', 'admin'),
+        database: config.get('DB_DATABASE', 'joyeria_db'),
+        autoLoadEntities: true,
+        synchronize: true,
+        entities: entities,
+      }),
+      inject: [ConfigService],
+    }),
+    AuthModule,
+    JwtAuthModule,
+    UsersModule,
+    ProductsModule,
+  ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: AuthGuard }],
 })

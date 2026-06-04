@@ -1,10 +1,24 @@
-import { CreateUserDto } from './create-user.dto';
+import { IsString, IsOptional, IsEnum } from 'class-validator';
+import { UserRole } from '../../common/enums/user-role.enum';
 
-export class UpdateUserDto implements Partial<CreateUserDto> {
-	name?: string;
-	surname?: string;
-	email?: string;
-	password?: string;
-	phone?: string;
-	role?: CreateUserDto['role'];
+export class UpdateUserDto {
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @IsOptional()
+  @IsString()
+  surname?: string;
+
+  @IsOptional()
+  @IsString()
+  usuario?: string;
+
+  @IsOptional()
+  @IsString()
+  password?: string;
+
+  @IsOptional()
+  @IsEnum(UserRole)
+  role?: UserRole;
 }

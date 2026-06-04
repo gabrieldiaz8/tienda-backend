@@ -1,40 +1,23 @@
-import { PrimaryGeneratedColumn } from 'typeorm/browser/decorator/columns/PrimaryGeneratedColumn.js';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { UserRole } from '../enums/user-role.enum';
-import { Column } from 'typeorm';
 
+@Entity('users')
 export class UserEntity {
-   @PrimaryGeneratedColumn({name: 'id'})
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ name: 'name' })
-    name: string;
+  @Column()
+  name: string;
 
-    @Column({ name: 'surname' })
-    surname: string;
+  @Column()
+  surname: string;
 
-	@Column()
-	usuario: string;
+  @Column({ unique: true })
+  usuario: string;
 
-    @Column()
-    password: string
+  @Column()
+  password: string;
 
-	@Column({
-		type: 'enum',
-		enum: UserRole,
-		default: UserRole.OWNER,
-	})
-	role: UserRole;
-
-    /*@Column({ name: 'birth_date' })
-    birthDate: Date;
-
-    @Column({ name: 'phone_number' })
-    phone: string;
-
-    @Column()
-    email: string;*/
-
-
-    
-
+  @Column({ type: 'varchar', default: UserRole.OWNER })
+  role: UserRole;
 }

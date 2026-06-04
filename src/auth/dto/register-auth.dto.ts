@@ -1,12 +1,24 @@
-import { LoginAuthDto } from "./login-auth.dto";
-import { UserRole } from "src/common/enums/user-role.enum";
+import { IsString, IsNotEmpty, IsOptional, IsEnum } from 'class-validator';
+import { UserRole } from '../../common/enums/user-role.enum';
 
-export class RegisterAuthDto extends LoginAuthDto {
-    name!: string;
+export class RegisterAuthDto {
+  @IsString()
+  @IsNotEmpty()
+  usuario!: string;
 
-    surname!: string;
+  @IsString()
+  @IsNotEmpty()
+  password!: string;
 
-    role?: UserRole;
+  @IsString()
+  @IsNotEmpty()
+  name!: string;
 
-    phone!: string;
+  @IsString()
+  @IsNotEmpty()
+  surname!: string;
+
+  @IsOptional()
+  @IsEnum(UserRole)
+  role?: UserRole;
 }
