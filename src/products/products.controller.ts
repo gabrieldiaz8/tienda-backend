@@ -58,14 +58,6 @@ export class ProductController {
   }
 
   @Public()
-  @Get('subcategory/:subcategory')
-  async findBySubcategory(
-    @Param('subcategory') subcategory: string,
-  ): Promise<ProductEntity[]> {
-    return await this.productService.findBySubcategory(subcategory);
-  }
-
-  @Public()
   @Get('price-range')
   async findByPriceRange(
     @Query('min') min: number,

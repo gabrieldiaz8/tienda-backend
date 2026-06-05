@@ -25,9 +25,6 @@ export class ProductEntity {
   @Column({ nullable: true })
   imageUrl: string;
 
-  @Column({ nullable: true })
-  subcategory: string;
-
   @Column()
   createdByUserId: number;
 }

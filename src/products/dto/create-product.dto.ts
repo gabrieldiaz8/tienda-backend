@@ -30,9 +30,5 @@ export class CreateProductDto {
 
   @IsOptional()
   @IsString()
-  subcategory?: string;
-
-  @IsOptional()
-  @IsString()
   imageUrl?: string;
 }

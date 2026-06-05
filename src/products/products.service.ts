@@ -47,11 +47,6 @@ export class ProductService {
     return await this.productRepository.find({ where: { category } });
   }
 
-  // Filtrar por subcategoria
-  async findBySubcategory(subcategory: string): Promise<ProductEntity[]> {
-    return await this.productRepository.find({ where: { subcategory } });
-  }
-
   // Filtrar por material
   async findByMaterial(material: ProductMaterial): Promise<ProductEntity[]> {
     return await this.productRepository.find({ where: { material } });
