@@ -12,8 +12,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname, join } from 'path';
+import { extname } from 'path';
 import { ProductService } from './products.service';
 import { ProductEntity } from '../common/entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -24,6 +23,8 @@ import { Public } from '../common/decorators/public.decorator';
 import { GetUserId } from '../common/decorators/getUserId.decorator';
 import { Roles } from '../common/decorators/permission.decorator';
 import { UserRole } from '../common/enums/user-role.enum';
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
 
 @Controller('products')
 export class ProductController {
@@ -82,13 +83,16 @@ export class ProductController {
   @Post('upload')
   @UseInterceptors(
     FileInterceptor('image', {
-      storage: diskStorage({
-        destination: join(process.cwd(), 'uploads'),
-        filename: (_req, file, callback) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
-          const ext = extname(file.originalname);
-          callback(null, `${uniqueSuffix}${ext}`);
+      storage: new CloudinaryStorage({
+        cloudinary: cloudinary,
+        params: async (_req, file) => {
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const ext = extname(file.originalname).replace('.', '');
+          return {
+            folder: 'tienda',
+            format: ext,
+            public_id: uniqueSuffix,
+          };
         },
       }),
       fileFilter: (_req, file, callback) => {
@@ -101,7 +105,7 @@ export class ProductController {
     }),
   )
   uploadImage(@UploadedFile() file: Express.Multer.File) {
-    return { imageUrl: `/uploads/${file.filename}` };
+    return { imageUrl: file.path };
   }
 
   @Roles(UserRole.OWNER, UserRole.SUPER_ADMIN)
