@@ -20,7 +20,19 @@ export class ProductService {
 
   // Obtener todos los productos
   async findAll(): Promise<ProductEntity[]> {
-    return await this.productRepository.find();
+    return await this.productRepository
+      .createQueryBuilder('product')
+      .orderBy('product.category', 'ASC')
+      .addOrderBy(
+        `CASE product.material
+          WHEN 'Plata925' THEN 1
+          WHEN 'Oro' THEN 2
+          WHEN 'Bañados en Plata' THEN 3
+          WHEN 'Acero Blanco' THEN 4
+          WHEN 'Acero Dorado' THEN 5
+          WHEN 'Acero Quirurgico' THEN 6
+        END`, 'ASC')
+      .getMany();
   }
 
   // Obtener producto por ID
@@ -44,7 +56,19 @@ export class ProductService {
 
   // Filtrar por categoría
   async findByCategory(category: ProductCategory): Promise<ProductEntity[]> {
-    return await this.productRepository.find({ where: { category } });
+    return await this.productRepository
+      .createQueryBuilder('product')
+      .where('product.category = :category', { category })
+      .orderBy(
+        `CASE product.material
+          WHEN 'Plata925' THEN 1
+          WHEN 'Oro' THEN 2
+          WHEN 'Bañados en Plata' THEN 3
+          WHEN 'Acero Blanco' THEN 4
+          WHEN 'Acero Dorado' THEN 5
+          WHEN 'Acero Quirurgico' THEN 6
+        END`, 'ASC')
+      .getMany();
   }
 
   // Filtrar por material
@@ -57,6 +81,15 @@ export class ProductService {
     return await this.productRepository
       .createQueryBuilder('product')
       .where('product.price BETWEEN :min AND :max', { min, max })
+      .addOrderBy(
+        `CASE product.material
+          WHEN 'Plata925' THEN 1
+          WHEN 'Oro' THEN 2
+          WHEN 'Bañados en Plata' THEN 3
+          WHEN 'Acero Blanco' THEN 4
+          WHEN 'Acero Dorado' THEN 5
+          WHEN 'Acero Quirurgico' THEN 6
+        END`, 'ASC')
       .getMany();
   }
 }
