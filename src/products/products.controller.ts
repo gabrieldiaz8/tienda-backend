@@ -105,7 +105,8 @@ export class ProductController {
     }),
   )
   uploadImage(@UploadedFile() file: Express.Multer.File) {
-    return { imageUrl: file.path };
+    const url = (file as any).secure_url || (file as any).path || file.path;
+    return { imageUrl: url };
   }
 
   @Roles(UserRole.OWNER, UserRole.SUPER_ADMIN)
