@@ -5,4 +5,5 @@ export enum ProductMaterial {
   ACERO_BLANCO = 'Acero Blanco',
   ACERO_DORADO = 'Acero Dorado',
   ACERO_QUIRURGICO = 'Acero Quirurgico',
+  OTRO = 'Otro',
 }
