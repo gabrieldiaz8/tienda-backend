@@ -14,7 +14,8 @@ import { entities } from './common/entities';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env.db',
+      isGlobal: true,
+      /*envFilePath: '.env.db',*/
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
