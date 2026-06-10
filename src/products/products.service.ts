@@ -31,6 +31,7 @@ export class ProductService {
           WHEN 'Acero Blanco' THEN 4
           WHEN 'Acero Dorado' THEN 5
           WHEN 'Acero Quirurgico' THEN 6
+          WHEN 'Otro' THEN 7
         END`, 'ASC')
       .getMany();
   }
@@ -67,6 +68,7 @@ export class ProductService {
           WHEN 'Acero Blanco' THEN 4
           WHEN 'Acero Dorado' THEN 5
           WHEN 'Acero Quirurgico' THEN 6
+          WHEN 'Otro' THEN 7
         END`, 'ASC')
       .getMany();
   }
@@ -89,6 +91,7 @@ export class ProductService {
           WHEN 'Acero Blanco' THEN 4
           WHEN 'Acero Dorado' THEN 5
           WHEN 'Acero Quirurgico' THEN 6
+          WHEN 'Otro' THEN 7
         END`, 'ASC')
       .getMany();
   }
