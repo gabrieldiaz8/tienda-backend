@@ -25,6 +25,9 @@ export class ProductEntity {
   @Column({ nullable: true })
   imageUrl: string;
 
+  @Column({ default: 0 })
+  stock: number;
+
   @Column()
   createdByUserId: number;
 }

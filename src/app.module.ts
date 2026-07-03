@@ -10,12 +10,13 @@ import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { entities } from './common/entities';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      /*envFilePath: '.env.db',*/
+      envFilePath: '.env.db',
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -36,6 +37,7 @@ import { entities } from './common/entities';
     JwtAuthModule,
     UsersModule,
     ProductsModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: AuthGuard }],

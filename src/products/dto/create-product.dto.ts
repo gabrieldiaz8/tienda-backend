@@ -29,6 +29,11 @@ export class CreateProductDto {
   material!: ProductMaterial;
 
   @IsOptional()
+  @IsNumber()
+  @Min(0)
+  stock?: number;
+
+  @IsOptional()
   @IsString()
   imageUrl?: string;
 }

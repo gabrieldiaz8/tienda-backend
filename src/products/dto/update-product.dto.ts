@@ -25,6 +25,11 @@ export class UpdateProductDto {
   material?: ProductMaterial;
 
   @IsOptional()
+  @IsNumber()
+  @Min(0)
+  stock?: number;
+
+  @IsOptional()
   @IsString()
   imageUrl?: string;
 }
