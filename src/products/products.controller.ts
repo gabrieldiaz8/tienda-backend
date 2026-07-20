@@ -17,7 +17,6 @@ import { ProductService } from './products.service';
 import { ProductEntity } from '../common/entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ProductCategory } from '../common/enums/product-category.enum';
 import { ProductMaterial } from '../common/enums/product-material.enum';
 import { Public } from '../common/decorators/public.decorator';
 import { GetUserId } from '../common/decorators/getUserId.decorator';
@@ -49,11 +48,11 @@ export class ProductController {
   }
 
   @Public()
-  @Get('category/:category')
+  @Get('category/:categoriaId')
   async findByCategory(
-    @Param('category') category: ProductCategory,
+    @Param('categoriaId') categoriaId: number,
   ): Promise<ProductEntity[]> {
-    return await this.productService.findByCategory(category);
+    return await this.productService.findByCategory(categoriaId);
   }
 
   @Public()

@@ -8,7 +8,13 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
 app.enableCors({
-  origin: ['https://www.adira.ar', 'https://adira.ar', 'https://gabrieldiaz8.github.io'],
+  origin: [
+    'https://www.adira.ar',
+    'https://adira.ar',
+    'https://gabrieldiaz8.github.io',
+    'http://localhost:4200',
+    'http://localhost:3000',
+  ],
 });
   app.useGlobalPipes(
     new ValidationPipe({

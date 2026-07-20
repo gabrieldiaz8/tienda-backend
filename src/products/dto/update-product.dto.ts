@@ -1,5 +1,4 @@
 import { IsString, IsOptional, IsNumber, IsEnum, Min } from 'class-validator';
-import { ProductCategory } from '../../common/enums/product-category.enum';
 import { ProductMaterial } from '../../common/enums/product-material.enum';
 
 export class UpdateProductDto {
@@ -17,8 +16,8 @@ export class UpdateProductDto {
   price?: number;
 
   @IsOptional()
-  @IsEnum(ProductCategory)
-  category?: ProductCategory;
+  @IsNumber()
+  categoriaId?: number;
 
   @IsOptional()
   @IsEnum(ProductMaterial)

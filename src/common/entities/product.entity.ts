@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import { ProductCategory } from '../enums/product-category.enum';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { ProductMaterial } from '../enums/product-material.enum';
+import { CategoriaEntity } from './categoria.entity';
 
 @Entity('products')
 export class ProductEntity {
@@ -16,8 +16,15 @@ export class ProductEntity {
   @Column('decimal', { precision: 10, scale: 2 })
   price: number;
 
-  @Column({ type: 'varchar' })
-  category: ProductCategory;
+  @Column({ nullable: true })
+  categoriaId: number;
+
+  @ManyToOne(() => CategoriaEntity)
+  @JoinColumn({ name: 'categoriaId' })
+  categoria: CategoriaEntity;
+
+  @Column({ type: 'varchar', nullable: true })
+  category: string;
 
   @Column({ type: 'varchar' })
   material: ProductMaterial;

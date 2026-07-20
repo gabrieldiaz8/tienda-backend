@@ -11,6 +11,7 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { entities } from './common/entities';
 import { OrdersModule } from './orders/orders.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -30,6 +31,9 @@ import { OrdersModule } from './orders/orders.module';
         autoLoadEntities: true,
         synchronize: true,
         entities: entities,
+        ssl: {
+          rejectUnauthorized: false
+        },
       }),
       inject: [ConfigService],
     }),
@@ -38,6 +42,7 @@ import { OrdersModule } from './orders/orders.module';
     UsersModule,
     ProductsModule,
     OrdersModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: AuthGuard }],
