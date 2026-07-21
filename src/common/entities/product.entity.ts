@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { ProductMaterial } from '../enums/product-material.enum';
 import { CategoriaEntity } from './categoria.entity';
+import { MaterialEntity } from './material.entity';
 
 @Entity('products')
 export class ProductEntity {
@@ -26,8 +26,15 @@ export class ProductEntity {
   @Column({ type: 'varchar', nullable: true })
   category: string;
 
-  @Column({ type: 'varchar' })
-  material: ProductMaterial;
+  @Column({ type: 'varchar', nullable: true })
+  material: string;
+
+  @Column({ nullable: true })
+  materialId: number;
+
+  @ManyToOne(() => MaterialEntity)
+  @JoinColumn({ name: 'materialId' })
+  materialRel: MaterialEntity;
 
   @Column({ nullable: true })
   imageUrl: string;

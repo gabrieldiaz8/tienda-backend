@@ -17,7 +17,6 @@ import { ProductService } from './products.service';
 import { ProductEntity } from '../common/entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ProductMaterial } from '../common/enums/product-material.enum';
 import { Public } from '../common/decorators/public.decorator';
 import { GetUserId } from '../common/decorators/getUserId.decorator';
 import { Roles } from '../common/decorators/permission.decorator';
@@ -56,11 +55,11 @@ export class ProductController {
   }
 
   @Public()
-  @Get('material/:material')
+  @Get('material/:materialId')
   async findByMaterial(
-    @Param('material') material: ProductMaterial,
+    @Param('materialId') materialId: number,
   ): Promise<ProductEntity[]> {
-    return await this.productService.findByMaterial(material);
+    return await this.productService.findByMaterial(materialId);
   }
 
   @Public()

@@ -2,11 +2,9 @@ import {
   IsString,
   IsNotEmpty,
   IsNumber,
-  IsEnum,
   IsOptional,
   Min,
 } from 'class-validator';
-import { ProductMaterial } from '../../common/enums/product-material.enum';
 
 export class CreateProductDto {
   @IsString()
@@ -24,8 +22,8 @@ export class CreateProductDto {
   @IsNumber()
   categoriaId!: number;
 
-  @IsEnum(ProductMaterial)
-  material!: ProductMaterial;
+  @IsNumber()
+  materialId!: number;
 
   @IsOptional()
   @IsNumber()

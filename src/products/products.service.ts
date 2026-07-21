@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductEntity } from '../common/entities/product.entity';
-import { ProductMaterial } from '../common/enums/product-material.enum';
 
 @Injectable()
 export class ProductService {
@@ -20,24 +19,16 @@ export class ProductService {
     return await this.productRepository
       .createQueryBuilder('product')
       .leftJoinAndSelect('product.categoria', 'categoria')
+      .leftJoinAndSelect('product.materialRel', 'materialRel')
       .orderBy('categoria.nombre', 'ASC')
-      .addOrderBy(
-        `CASE product.material
-          WHEN 'Plata925' THEN 1
-          WHEN 'Oro' THEN 2
-          WHEN 'Bañados en Plata' THEN 3
-          WHEN 'Acero Blanco' THEN 4
-          WHEN 'Acero Dorado' THEN 5
-          WHEN 'Acero Quirurgico' THEN 6
-          WHEN 'Otro' THEN 7
-        END`, 'ASC')
+      .addOrderBy('materialRel.orden', 'ASC')
       .getMany();
   }
 
   async findById(id: number): Promise<ProductEntity | null> {
     return await this.productRepository.findOne({
       where: { id },
-      relations: ['categoria'],
+      relations: ['categoria', 'materialRel'],
     });
   }
 
@@ -57,39 +48,26 @@ export class ProductService {
     return await this.productRepository
       .createQueryBuilder('product')
       .leftJoinAndSelect('product.categoria', 'categoria')
+      .leftJoinAndSelect('product.materialRel', 'materialRel')
       .where('product.categoriaId = :categoriaId', { categoriaId })
-      .orderBy(
-        `CASE product.material
-          WHEN 'Plata925' THEN 1
-          WHEN 'Oro' THEN 2
-          WHEN 'Bañados en Plata' THEN 3
-          WHEN 'Acero Blanco' THEN 4
-          WHEN 'Acero Dorado' THEN 5
-          WHEN 'Acero Quirurgico' THEN 6
-          WHEN 'Otro' THEN 7
-        END`, 'ASC')
+      .orderBy('materialRel.orden', 'ASC')
       .getMany();
   }
 
-  async findByMaterial(material: ProductMaterial): Promise<ProductEntity[]> {
-    return await this.productRepository.find({ where: { material }, relations: ['categoria'] });
+  async findByMaterial(materialId: number): Promise<ProductEntity[]> {
+    return await this.productRepository.find({
+      where: { materialId },
+      relations: ['categoria', 'materialRel'],
+    });
   }
 
   async findByPriceRange(min: number, max: number): Promise<ProductEntity[]> {
     return await this.productRepository
       .createQueryBuilder('product')
       .leftJoinAndSelect('product.categoria', 'categoria')
+      .leftJoinAndSelect('product.materialRel', 'materialRel')
       .where('product.price BETWEEN :min AND :max', { min, max })
-      .addOrderBy(
-        `CASE product.material
-          WHEN 'Plata925' THEN 1
-          WHEN 'Oro' THEN 2
-          WHEN 'Bañados en Plata' THEN 3
-          WHEN 'Acero Blanco' THEN 4
-          WHEN 'Acero Dorado' THEN 5
-          WHEN 'Acero Quirurgico' THEN 6
-          WHEN 'Otro' THEN 7
-        END`, 'ASC')
+      .addOrderBy('materialRel.orden', 'ASC')
       .getMany();
   }
 }

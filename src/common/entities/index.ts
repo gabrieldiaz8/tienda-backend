@@ -3,5 +3,6 @@ import { OrderEntity } from './order.entity';
 import { ProductEntity } from './product.entity';
 import { UserEntity } from './user.entity';
 import { CategoriaEntity } from './categoria.entity';
+import { MaterialEntity } from './material.entity';
 
-export const entities = [ProductEntity, UserEntity, OrderEntity, OrderItemEntity, CategoriaEntity];
+export const entities = [ProductEntity, UserEntity, OrderEntity, OrderItemEntity, CategoriaEntity, MaterialEntity];
