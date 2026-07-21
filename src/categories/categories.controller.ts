@@ -19,7 +19,7 @@ import { Public } from '../common/decorators/public.decorator';
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  @Roles(UserRole.SUPER_ADMIN)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.OWNER)
   @Post()
   async create(@Body() dto: CreateCategoryDto): Promise<CategoriaEntity> {
     return await this.categoriesService.create(dto);
@@ -43,7 +43,7 @@ export class CategoriesController {
     return await this.categoriesService.findById(id);
   }
 
-  @Roles(UserRole.SUPER_ADMIN)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.OWNER)
   @Patch(':id')
   async update(
     @Param('id') id: number,
@@ -52,7 +52,7 @@ export class CategoriesController {
     return await this.categoriesService.update(id, dto);
   }
 
-  @Roles(UserRole.SUPER_ADMIN)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.OWNER)
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<void> {
     return await this.categoriesService.remove(id);
