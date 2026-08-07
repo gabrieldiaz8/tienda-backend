@@ -32,9 +32,7 @@ import { MaterialsModule } from './materials/materials.module';
         autoLoadEntities: true,
         synchronize: true,
         entities: entities,
-        ssl: {
-          rejectUnauthorized: false
-        },
+        ssl: false, //Esto me daba error
       }),
       inject: [ConfigService],
     }),
